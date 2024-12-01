@@ -6,9 +6,14 @@ namespace aoctest;
 public class Tests
 {
     [Test]
-    public void Test1()
+    public void Day1Test()
     {
-        var sample = Common.ReadFile("Day1/sample");
-        Assert.That(Day1.Solve1(sample), Is.EqualTo(2));
+        var sample = Common.ReadFile("Day1/Sample");
+        Assert.That(Day1.Solve1(sample), Is.EqualTo(11));
+        var input = Common.ReadFile("Day1/Input");
+        Assert.That(Day1.Solve1(input), Is.EqualTo(765748));
+
+        Assert.That(Day1.Solve2(sample), Is.EqualTo(31));
+        Assert.That(Day1.Solve2(input), Is.EqualTo(27732508));
     }
 }
