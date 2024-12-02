@@ -3,7 +3,7 @@ using aoc2024.Day1;
 
 namespace aoctest;
 
-public class Tests
+public partial class Tests
 {
     [Test]
     public void Day1Test()

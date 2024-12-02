@@ -33,8 +33,7 @@ public static class Day1
             {
                 var (l, d) = a;
                 l.Add(n[0]);
-                int v = d.GetValueOrDefault(n[1], 0);
-                d[n[1]] = v + 1;
+                d[n[1]] = d.GetValueOrDefault(n[1], 0) + 1;
                 return a;
             });
         return l.Select(n => n * d.GetValueOrDefault(n, 0)).Sum();
