@@ -9,14 +9,6 @@ public static class Day12
         (-1, 0), (1, 0), (0, 1), (0, -1)
     ];
 
-    static (int, int)[][] corners =
-    {
-        [(1, 0), (1, -1), (0, -1)], // Top right corner
-        [(-1, 0), (-1, -1), (0, -1)], // Top left corner
-        [(1, 0), (1, 1), (0, 1)], // Bottom right corner
-        [(-1, 0), (-1, 1), (0, 1)], // Bottom left corner
-    };
-
     static void PopulateSet((int, int) position, HashSet<(int, int)> from, HashSet<(int, int)> to)
     {
         if (!from.Contains(position)) return;
