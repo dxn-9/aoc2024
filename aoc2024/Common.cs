@@ -1,4 +1,5 @@
 global using Coord2 = (long x, long y);
+global using Coord2I = (int x, int y);
 
 namespace aoc2024;
 
