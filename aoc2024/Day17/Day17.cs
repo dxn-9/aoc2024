@@ -81,26 +81,6 @@ public static class Day17
             pc = performInstruction((OpCodes)instruction, operand);
             Eval();
         }
-
-        public bool Eval(Dictionary<(long, long, long, int), List<int>> memo, List<int> target)
-        {
-            var (instruction, operand, halt) = parseInput();
-            var key = (A, B, C, pc);
-            if (memo.TryGetValue(key, out var value))
-            {
-                stdout = stdout.Concat(value).ToList();
-                return target.ListEquals(stdout);
-            }
-
-            if (halt) return target.ListEquals(stdout);
-            var before = new List<int>(stdout);
-            pc = performInstruction((OpCodes)instruction, operand);
-            var result = Eval(memo, target);
-            var after = stdout.Skip(before.Count).ToList();
-            memo[key] = after;
-
-            return result;
-        }
     }
 
     public static string Solve1(string input)
@@ -115,16 +95,6 @@ public static class Day17
         return string.Join(",", program.stdout);
     }
 
-    static bool ListEquals(this List<int> a, List<int> b)
-    {
-        if (a.Count != b.Count) return false;
-        for (int i = 0; i < a.Count; i++)
-        {
-            if (a[i] != b[i]) return false;
-        }
-
-        return true;
-    }
 
     static IEnumerable<long> GenerateA(List<int> program, List<int> output)
     {
@@ -152,10 +122,6 @@ public static class Day17
     public static long Solve2(string input)
     {
         var stdin = input.Split("\n\n")[1].Split(":")[1].Trim().Split(",").Select(int.Parse).ToList();
-        var memo = new Dictionary<(long, long, long, int), List<int>>();
-        var tasksCount = 500;
-
-        var tasks = new List<Task<int>>();
 
         return GenerateA(stdin, stdin).Min();
     }
