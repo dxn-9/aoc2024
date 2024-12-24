@@ -28,7 +28,7 @@ public static class Day18
         while (unvisitedSet.Count > 0)
         {
             var min = unvisitedSet.MinBy(v => dist.GetValueOrDefault(v, float.PositiveInfinity));
-            if (min == goal) // TOD71O
+            if (min == goal)
                 return CountSteps(prev, goal);
 
             unvisitedSet.Remove(min);
