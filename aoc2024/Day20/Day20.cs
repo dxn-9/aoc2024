@@ -6,9 +6,9 @@ public static class Day20
 {
     static Vector2[] dirs = { new Vector2(1, 0), new Vector2(-1, 0), new Vector2(0, 1), new Vector2(0, -1) };
 
-    // Idea: calculate first the normal path using djakstra. Then go through the generated path and 
+    // Idea: calculate first the normal path. Then go through the generated path and 
     // look for possible cheats and each time save.
-    // (we get the time saved by saving the time it took to reach that node in the first place)
+    // (we get the time saved by comparing the time it took to reach that node in the first place)
     public static int CalcCheats(Dictionary<Vector2, char> map, int minSave, int cheatTime)
     {
         Vector2 playerPosition = map.Single(kv => kv.Value == 'S').Key,
