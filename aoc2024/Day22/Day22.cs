@@ -1,10 +1,4 @@
-using System.Collections.Concurrent;
-using System.Numerics;
-
 namespace aoc2024.Day22;
-
-// Memoize the next 500th sequence.
-using Memo = Dictionary<long, long>;
 
 public static class Day22
 {
@@ -21,55 +15,55 @@ public static class Day22
         return secret;
     }
 
+    const int SecretsGenerated = 2000;
+    static string SequenceKey(long[] sequence) => string.Join(",", sequence);
+
     public static long Solve1(string input)
-    {
-        var memo = new Dictionary<long, Dictionary<int, long>>();
-
-        var r = input.Split('\n').Select(long.Parse).Select(num =>
+        => input.Split('\n').Select(long.Parse).AsParallel().Select(num =>
             {
-                var current = new Dictionary<long, long>();
-                for (int i = 0; i < 2000; i++)
+                for (int i = 0; i < SecretsGenerated; i++)
                 {
-                    if (memo.TryGetValue(num, out var jumpDict))
-                    {
-                        var bestKey = -1;
-                        foreach (var key in jumpDict.Keys)
-                        {
-                            if (key + i >= 2000) continue;
-                            bestKey = Math.Max(key, bestKey);
-                        }
-
-                        bool shouldSkip = bestKey != -1;
-
-
-                        if (shouldSkip)
-                        {
-                            num = jumpDict[bestKey];
-                            i += bestKey - 1;
-                            continue;
-                        }
-                    }
-
-                    current[i] = CalculateNextSecret(num);
-                    if (i >= 1980)
-                    {
-                        for (int j = 0; j < i - 1980; j++)
-                        {
-                            if (current.ContainsKey(j))
-                            {
-                                var dict = memo.GetValueOrDefault(current[j], new Dictionary<int, long>());
-                                dict[i - j] = current[i];
-                                memo[current[j]] = dict;
-                            }
-                        }
-                    }
-
-                    num = current[i];
+                    num = CalculateNextSecret(num);
                 }
 
                 return num;
             }
         ).Sum();
-        return r;
+
+    public static long GetPrice(long secret) =>
+        secret % 10;
+
+    public static long Solve2(string input)
+    {
+        var tuple = input.Split('\n').Select(long.Parse).AsParallel().Select(num =>
+        {
+            var sequences = new List<long[]>();
+            var secrets = new List<long> { num };
+            var sequence = new long[4];
+            for (int i = 0; i < SecretsGenerated; i++)
+            {
+                num = CalculateNextSecret(num);
+                secrets.Add(num);
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                sequence[i] = GetPrice(secrets[i + 1]) - GetPrice(secrets[i]);
+            }
+
+            var payForSequence = new Dictionary<string, long> { [SequenceKey(sequence)] = GetPrice(secrets[4]) };
+            sequences.Add([..sequence]);
+            for (int i = 4; i < secrets.Count - 1; i++)
+            {
+                sequence = [..sequence[1..4], GetPrice(secrets[i + 1]) - GetPrice(secrets[i])];
+                if (!payForSequence.ContainsKey(SequenceKey(sequence)))
+                    payForSequence[SequenceKey(sequence)] = GetPrice(secrets[i + 1]);
+                sequences.Add([..sequence]);
+            }
+
+            return (sequences, payForSequence);
+        }).ToList();
+        var allSequences = tuple.SelectMany(t => t.sequences.Select(SequenceKey)).ToHashSet();
+        return allSequences.AsParallel().Max(seq => tuple.Sum(l => l.payForSequence.GetValueOrDefault(seq, 0)));
     }
 }
