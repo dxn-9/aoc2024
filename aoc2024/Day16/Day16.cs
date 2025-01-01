@@ -127,7 +127,7 @@ public static class Day16
             map.Single(kv => kv.Value == 'E').Key));
     }
 
-    // This is by far the least optimal solution..
+    // This is very slow
     public static long Solve2(string input)
     {
         var map = input.Split('\n')
