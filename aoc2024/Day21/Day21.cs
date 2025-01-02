@@ -117,8 +117,7 @@ class Keypad
 public static class Day21
 {
     public static long Solve1(string input, int robotCount)
-    {
-        return input.Split('\n').Sum(line =>
+        => input.Split('\n').Sum(line =>
         {
             var firstRobot = new Keypad("789\n456\n123\nX0A");
             var currRobot = firstRobot;
@@ -132,5 +131,4 @@ public static class Day21
             var result = firstRobot.ExecuteProgram(line);
             return result * long.Parse(line.Split('A')[0]);
         });
-    }
 }
